@@ -166,17 +166,17 @@ def get_sys_stat(registry):
     res = ikuai_call(data)
     if not res: return registry
     res = res["sysstat"]
-    for k,v in res.items():
+    for k, v in res.items():
         if k == "cpu": prom.Gauge(f'ikuai_sys_stat_cpu_used', f'CPU使用率', registry=registry).set(float(v[0].replace("%", "")))
-        if k == "cputemp": prom.Gauge(f'ikuai_sys_stat_cpu_temp', f'CPU温度', registry=registry).set(v)
+        if k == "cputemp": prom.Gauge(f'ikuai_sys_stat_cpu_temp', f'CPU温度', registry=registry).set(v[0])
         if k == "memory":
-            memory = prom.Gauge(f'ikuai_sys_stat_memory', f'CPU温度', ["type"], registry=registry)
+            memory = prom.Gauge(f'ikuai_sys_stat_memory', f'内存信息', ["type"], registry=registry)
             memory.labels("total").set(v["total"])
             memory.labels("available").set(v["available"])
             memory.labels("free").set(v["free"])
             memory.labels("cached").set(v["cached"])
             memory.labels("buffers").set(v["buffers"])
-            memory.labels("used").set(float(v["used"].replace("%", "")))
+            memory.labels("used").set(float(v["used"][0].replace("%", "")))
         if k == "stream":
             stream  = prom.Gauge(f'ikuai_sys_stat_stream', f'系统实时流量', ["type"], registry=registry)
             stream.labels("connect_num").set(v["connect_num"])
@@ -184,7 +184,6 @@ def get_sys_stat(registry):
             stream.labels("download").set(v["download"])
             stream.labels("total_up").set(v["total_up"])
             stream.labels("total_down").set(v["total_down"])
-        
     return registry
 
 app = Flask(__name__)
@@ -200,6 +199,7 @@ def metrics():
     registry = get_iface_stream(registry)
     registry = get_client_stream(registry)
     registry = get_protocol(registry)
+    registry = get_sys_stat(registry)
     return Response(prom.generate_latest(registry), mimetype="text/plain")
 
 # APP调试模式
