@@ -176,7 +176,7 @@ def get_sys_stat(registry):
             memory.labels("free").set(v["free"])
             memory.labels("cached").set(v["cached"])
             memory.labels("buffers").set(v["buffers"])
-            memory.labels("used").set(float(v["used"][0].replace("%", "")))
+            memory.labels("used").set(float(v["used"].replace("%", "")))
         if k == "stream":
             stream  = prom.Gauge(f'ikuai_sys_stat_stream', f'系统实时流量', ["type"], registry=registry)
             stream.labels("connect_num").set(v["connect_num"])
