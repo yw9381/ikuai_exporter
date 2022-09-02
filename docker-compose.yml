@@ -1,0 +1,15 @@
+version: "2"
+
+services:
+  ikuai_exporter:
+    build: .
+    image: ikuai_exporter
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      - IK_USERNAME=admin
+      - IK_PASSWORD=admin
+      - IK_IPADDR=192.168.1.1
+      # - IK_MGR_PORT=
+      # - IK_USE_HTTPS=
