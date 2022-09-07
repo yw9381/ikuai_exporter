@@ -106,11 +106,11 @@ def get_client_stream(registry):
     res = ikuai_call(data)
     if not res: return registry
     res = res["data"]
-    upload      = prom.Gauge('ikuai_client_upload', '接口实时上传', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
-    download    = prom.Gauge('ikuai_client_download', '接口实时下载', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
-    total_up    = prom.Gauge('ikuai_client_total_upload', '接口总计上传', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
-    total_down  = prom.Gauge('ikuai_client_total_download', '接口总计下载', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
-    connect_num = prom.Gauge('ikuai_client_connect_num', '接口实时下载', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
+    upload      = prom.Gauge('ikuai_client_upload', '客户端实时上传', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
+    download    = prom.Gauge('ikuai_client_download', '客户端实时下载', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
+    total_up    = prom.Gauge('ikuai_client_total_upload', '客户端总计上传', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
+    total_down  = prom.Gauge('ikuai_client_total_download', '客户端总计下载', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
+    connect_num = prom.Gauge('ikuai_client_connect_num', '客户端实时下载', ["ip_addr", "mac", "hostname", "client_type", "comment"], registry=registry)
     for r in res:
         upload.labels(r["ip_addr"], r["mac"], r["hostname"], r["client_type"], r["comment"]).set(r["upload"])
         download.labels(r["ip_addr"], r["mac"], r["hostname"], r["client_type"], r["comment"]).set(r["download"])
